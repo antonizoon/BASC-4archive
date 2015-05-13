@@ -1,33 +1,85 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-# BASC 4archive: 4archive-img-dl.sh
+# BASC 4archive: 4archive-img-dl.py
 # 
 # This script downloads all images from the 4archive's third-party image hosting services.
 
 import sys
 import time
 import sqlite3
+from docopt import docopt
 from glob import glob
 from os.path import basename
 from urllib.parse import urlparse
 
 from utils import *
 
+__doc__ = """BASC 4archive: 4archive-img-dl.py.
+This script downloads all images from the 4archive's third-party image hosting services. 
+
+By default, it will scrape every board, but you can tell it to just scrape one board at a time.
+
+Usage:
+  4archive-img-dl.py
+  4archive-img-dl.py <board> [--delay=<pause>]
+  4archive-img-dl.py --clean
+  4archive-img-dl.py (-h | --help)
+
+Options:
+  -h --help        Show this screen.
+  --clean       Delete lock.sqlite before starting a second dump.
+  --delay=<pause>  Delay between image downloads [default: 2].
+
+"""
+
+# define current working directory
+workdir = os.path.join(os.getcwd(), "4archive")
+db_fname = os.path.join(workdir, "4archive.sqlite")
+lockdb_fname = os.path.join(workdir, "lock.sqlite")
+imgurl_fname = "imageurls.txt"
+
+# make a new lockdb
+def create_database():
+	mkdirs(workdir)				# ensure that the workdir exists
+
+	# delete database if it already exists
+	try:
+		os.remove(lockdb_fname)
+	except OSError:
+		pass
+
+	# create a database to store macrochan data
+	conn = sqlite3.connect(lockdb_fname)
+	c = conn.cursor()
+
+	# create `images` table
+	c.execute('''CREATE TABLE savedthreads (
+	  board text,
+	  thread integer
+	)''')
+
+	# Save (commit) the database changes
+	conn.commit()
+
+	# close sqlite database
+	conn.close()
+
 def main():
-	# delay between downloads
-	delay = 2
+	# docopts
+	args = docopt(__doc__)
+	
+	# delay between downloads, command line argument with default
+	pause = float(args['--delay'])
 	delay404 = 30
 	
-	# define current working directory
-	workdir = os.path.join(os.getcwd(), "4archive")
-	db_fname = os.path.join(workdir, "4archive.sqlite")
-	lockdb_fname = os.path.join(workdir, "lock.sqlite")
-	imgurl_fname = "imageurls.txt"
-	
-	# sql query to obtain all thread ids, along with other helpful info
-#	thread_query = """SELECT board, thread_id FROM threads ORDER BY board, thread_id;"""
-	thread_query = """SELECT board, thread_id FROM threads WHERE board = "y" ORDER BY board, thread_id;"""
+	# create a new lock.sqlite if clean option is given or it doesn't exist
+	if (args['--clean']):
+		create_database()
+		sys.exit(0)
+
+	if (not os.path.exists(lockdb_fname)):
+		create_database()
 	
 	# if no ./4archive folder found, ask the user to run generate-url-lists.py
 	if not os.path.isdir(workdir):
@@ -38,16 +90,17 @@ def main():
 	conn = sqlite3.connect(db_fname)
 	c = conn.cursor()
 	
-	# run sql_query and store in variable
-	c.execute(thread_query)
-	data = c.fetchall()
+	# sql query to obtain all thread ids, along with other helpful info
+	if (args['<board>'] != ''):		# argument for single board
+		c.execute("""SELECT board, thread_id FROM threads WHERE board = (?) ORDER BY board, thread_id;""", [sys.argv[1]])
+	else:						# scrape all boards
+		c.execute("""SELECT board, thread_id FROM threads ORDER BY board, thread_id;""")
 	
 	# determine amount of rows in table, and calculate where to stop
 	# should be 0 for empty database
-	c.execute('SELECT COUNT(*) FROM threads')
-	count = c.fetchall()
-	row_amt = count[0][0]
-	print("Table 'threads' has {} rows.".format(row_amt))
+	data = c.fetchall()
+	row_amt = len(data)
+	print("{} threads will be downloaded.".format(row_amt))
 	stop = row_amt
 
 	# create a lock database to keep track of progress
@@ -59,11 +112,11 @@ def main():
 	lock_c.execute('SELECT COUNT(*) FROM savedthreads')
 	count = lock_c.fetchall()
 	row_amt = count[0][0]
-	print("Starting at {} on table 'threads'.".format(0))
-	start = row_amt
+	print("Starting at {} on table 'threads'.".format(row_amt + 1))
+	start = int(row_amt)
 	
 	# iterate download through rows, board and thread_id as columns
-	for index in range(start, stop):
+	for index in range(start, stop - 1):
 		# grab data
 		board = data[index][0]
 		thread = data[index][1]
@@ -92,7 +145,7 @@ def main():
 					print("   Downloaded", filename)
 				
 				# take a short break
-				time.sleep(delay)
+				time.sleep(pause)
 				
 		# save progress
 		lock_c.execute('INSERT OR IGNORE INTO savedthreads (board, thread) VALUES (?, ?)', [board, thread])
@@ -101,13 +154,11 @@ def main():
 	# close connections when finished
 	conn.close()
 	lock_conn.close()
+	
+	# completion message
+	print("Done! If you've been scraping every board, you can now upload the image backup to the Internet Archive.")
+	print("If you've only been scraping one board, run \n4archive-img-dl.py --clean \nand start scraping another one.")
 
 
 if __name__ == '__main__':
-	# retry loop: in case of failure or timeout, wait 60 sec. and try again
-	# by default, try 5 times
-	for i in range(1, 5):
-		print("Attempt {}:".format(i))
-		main()
-		print("Restarting script in {} seconds...".format())
-		time.delay(60)
+	main()
