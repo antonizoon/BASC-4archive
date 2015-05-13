@@ -16,7 +16,8 @@ from utils import *
 
 def main():
 	# delay between downloads
-	delay = 1
+	delay = 2
+	delay404 = 30
 	
 	# define current working directory
 	workdir = os.path.join(os.getcwd(), "4archive")
@@ -25,8 +26,8 @@ def main():
 	imgurl_fname = "imageurls.txt"
 	
 	# sql query to obtain all thread ids, along with other helpful info
-	thread_query = """SELECT board, thread_id FROM threads ORDER BY board, thread_id;"""
-#	thread_query = """SELECT board, thread_id FROM threads WHERE board = "y" ORDER BY board, thread_id;"""
+#	thread_query = """SELECT board, thread_id FROM threads ORDER BY board, thread_id;"""
+	thread_query = """SELECT board, thread_id FROM threads WHERE board = "y" ORDER BY board, thread_id;"""
 	
 	# if no ./4archive folder found, ask the user to run generate-url-lists.py
 	if not os.path.isdir(workdir):
@@ -80,10 +81,11 @@ def main():
 				
 				# download file, board/thread/files
 				if not download_file(os.path.join(path, "files", filename), url, clobber=True):
-					print("   Could not download {}, retrying in {}".format(filename))
+					print("   Could not download {}, retrying in {}".format(filename, delay404))
 					
 					# retry 5 times after 30 sec. delay if 404
 					for x in range(0, 5):
+						time.sleep(delay404)
 						if download_file(os.path.join(path, "files", filename), url, clobber=True):
 							break
 				else:
@@ -92,8 +94,6 @@ def main():
 				# take a short break
 				time.sleep(delay)
 				
-		# iterate after completion of one thread
-			
 		# save progress
 		lock_c.execute('INSERT OR IGNORE INTO savedthreads (board, thread) VALUES (?, ?)', [board, thread])
 		lock_conn.commit()
