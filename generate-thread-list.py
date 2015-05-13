@@ -10,14 +10,14 @@ import sqlite3
 
 from utils import *
 
-json_fname = "thread-list.json"
-db_fname = "4archive.sqlite"
 # sql query to obtain all thread ids, along with other helpful info
 thread_query = """SELECT board, thread_id FROM threads ORDER BY board, thread_id;"""
 
 def main():
 	# define current working directory
 	workdir = os.path.join(os.getcwd(), "4archive")
+	json_fname = os.path.join(workdir, "thread-list.json")
+	db_fname = os.path.join(workdir, "4archive.sqlite")
 	
 	# if no ./4archive folder found, ask the user to run generate-url-lists.py
 	if not os.path.isdir(workdir):
@@ -49,7 +49,7 @@ def main():
 		thread_dict.append({'board' : board, 'thread' : thread_id})
 		
 	# write JSON dictionary to a file in folder structure, truncate
-	with open(os.path.join(workdir, json_fname), "w") as f:
+	with open(json_fname, "w") as f:
 		f.write(json.dumps(thread_dict, sort_keys=True, indent=4, separators=(',', ': ')))
 		
 	# close database when finished
