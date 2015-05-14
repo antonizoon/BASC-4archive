@@ -29,7 +29,7 @@ Usage:
 Options:
   -h --help        Show this screen.
   --clean       Delete lock.sqlite before starting a second dump.
-  --delay=<pause>  Delay between image downloads [default: 2].
+  --delay=<pause>  Delay between image downloads [default: 1].
 
 """
 

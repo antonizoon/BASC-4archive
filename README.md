@@ -33,7 +33,7 @@ python3 4archive-img-dl.py
 * /a/ - Animu and Mango (in progress, chrysoloras)
 * /an/ - Animals (12 Threads, 317MB)
 * /diy/ - Do-it-Yourself (39 Threads, 265.9MB)
-* /lit/ - Literature (142 Threads, 593.8MB)
+* /lit/ - Literature (142 Threads)
 * /po/ - Papercraft and Origami (5 threads, 21.6MB)
 * /sp/ - Sports (158 Threads, 3312MB)
 * /vp/ - Pokemon (368 Threads, tabris)
