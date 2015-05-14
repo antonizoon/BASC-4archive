@@ -2,6 +2,12 @@
 
 An initiative by the Bibliotheca Anonoma to rescue and rehost the 4archive.
 
+### Dependencies
+
+* python3-requests
+* python3-docopts
+* python3-sqlite3
+
 ### Usage
 
 ```bash
@@ -19,3 +25,17 @@ python3 create-lock-database.py
 # begin downloading all images (can take a while, and needs lots of space)
 python3 4archive-img-dl.py
 ```
+
+### Progress
+
+~250 per folder for NSFW imageboards
+
+* /a/ - Animu and Mango (in progress, chrysoloras)
+* /an/ - Animals (12 Threads, 317MB)
+* /diy/ - Do-it-Yourself (39 Threads, 265.9MB)
+* /lit/ - Literature (142 Threads, 593.8MB)
+* /po/ - Papercraft and Origami (5 threads, 21.6MB)
+* /sp/ - Sports (158 Threads, 3312MB)
+* /vp/ - Pokemon (368 Threads, tabris)
+* /x/ - Paranormal (448 Threads)
+* /y/ - Yaoi (45 threads, 1.7GB)

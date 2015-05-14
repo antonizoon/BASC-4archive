@@ -36,11 +36,11 @@ Options:
 # define current working directory
 workdir = os.path.join(os.getcwd(), "4archive")
 db_fname = os.path.join(workdir, "4archive.sqlite")
-lockdb_fname = os.path.join(workdir, "lock.sqlite")
+lockdb_fname = os.path.join(workdir, "{}.sqlite")
 imgurl_fname = "imageurls.txt"
 
 # make a new lockdb
-def create_database():
+def create_database(board="lock"):
 	mkdirs(workdir)				# ensure that the workdir exists
 
 	# delete database if it already exists
@@ -50,7 +50,7 @@ def create_database():
 		pass
 
 	# create a database to store macrochan data
-	conn = sqlite3.connect(lockdb_fname)
+	conn = sqlite3.connect(lockdb_fname.format(board))
 	c = conn.cursor()
 
 	# create `images` table
@@ -75,11 +75,19 @@ def main():
 	
 	# create a new lock.sqlite if clean option is given or it doesn't exist
 	if (args['--clean']):
-		create_database()
+		if (args['<board>'] != ''):
+			create_database(args['<board>'])
+		else:
+			create_database()
+		
 		sys.exit(0)
 
-	if (not os.path.exists(lockdb_fname)):
-		create_database()
+	if (args['<board>'] != ''):
+		if (not os.path.exists(lockdb_fname.format(args['<board>']))):
+			create_database(args['<board>'])
+	else:
+		if (not os.path.exists(lockdb_fname.format("lock"))):
+			create_database()
 	
 	# if no ./4archive folder found, ask the user to run generate-url-lists.py
 	if not os.path.isdir(workdir):
@@ -104,7 +112,11 @@ def main():
 	stop = row_amt
 
 	# create a lock database to keep track of progress
-	lock_conn = sqlite3.connect(lockdb_fname)
+	if (args['<board>'] != ''):
+		lock_conn = sqlite3.connect(lockdb_fname.format(args['<board>']))
+	else:
+		lock_conn = sqlite3.connect(lockdb_fname.format("lock"))
+
 	lock_c = lock_conn.cursor()
 	
 	# determine amount of rows in table with imageext, and calculate where to start
