@@ -140,21 +140,25 @@ def main():
 		# open each imageurls.txt and download all images from them
 		with open(os.path.join(path, imgurl_fname), "r") as f:
 			for url in f:
-				
 				# obtain filename from URL
 				filename = basename(urlparse(url).path).strip()
 				
-				# download file, board/thread/files
-				if not download_file(os.path.join(path, "files", filename), url, clobber=True):
-					print("   Could not download {}, retrying in {}".format(filename, delay404))
-					
-					# retry 5 times after 30 sec. delay if 404
-					for x in range(0, 5):
+				# retry 5 times after 30 sec. delay if 404
+				for x in range(0, 5):
+					try:
+						# download file, board/thread/files
+						download_file(os.path.join(path, "files", filename), url, clobber=True)
+						
+						# if downloaded, quit
+						print("   Downloaded", filename)
+						break
+					# if connection failure, try again later
+					except requests.exceptions.RequestException as e:
+						print("   Could not download {}, retrying in {}".format(filename, delay404))
+
+						# sleep, then continue
 						time.sleep(delay404)
-						if download_file(os.path.join(path, "files", filename), url, clobber=True):
-							break
-				else:
-					print("   Downloaded", filename)
+						continue
 				
 				# take a short break
 				time.sleep(pause)
