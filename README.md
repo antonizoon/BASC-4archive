@@ -56,6 +56,7 @@ python3 4archive-img-dl.py
 * (DONE) /trv/ - Travel (187 Threads, YSVPS)
 * /v/ - Video Games (5851 Threads, Chrysoloras)
 * (UPLOADING) /vg/ - Video Games Generals (567 Threads, YSVPS)
-* /vp/ - Pokemon (368 Threads, tabris)
+* (DONE) /vp/ - Pokemon (368 Threads, tabris)
+* /vr/ - Retro Games (22 Threads, tabris)
 * (DONE) /x/ - Paranormal (448 Threads, attaliates)
 * (UPLOADED) /y/ - Yaoi (45 threads, 1.7GB, tabris)

@@ -5,13 +5,21 @@
 # 
 # This script downloads all images from the 4archive's third-party image hosting services.
 
+# turns print into a function in python 2.6
+from __future__ import print_function
+
 import sys
 import time
 import sqlite3
 from docopt import docopt
 from glob import glob
 from os.path import basename
-from urllib.parse import urlparse
+
+# urlparse lib renamed from 2 -> 3
+try:
+	from urllib.parse import urlparse
+except ImportError:
+	import urlparse
 
 from utils import *
 
