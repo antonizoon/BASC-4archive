@@ -18,8 +18,11 @@ mv $BOARD $WORKDIR/
 # zip up the folder
 zip -3 -r $BOARD-images-4archive.zip $WORKDIR
 
-# move the board out of the folder
-mv $WORKDIR/$BOARD .
+# move everything out of the folder before deletion
+mv $WORKDIR/* .
+
+# clean up the temp folder
+rm -rf $BOARD-zip
 
 # upload to Internet Archive
 s3cmd put $BOARD-images-4archive.zip s3://4archive/
