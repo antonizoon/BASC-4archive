@@ -16,6 +16,7 @@ mkdir -p $WORKDIR
 mv $BOARD $WORKDIR/
 
 # zip up the folder
+cd $BOARD-zip/
 zip -3 -r $BOARD-images-4archive.zip $WORKDIR
 
 # move everything out of the folder before deletion
