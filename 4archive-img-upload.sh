@@ -7,18 +7,19 @@
 
 # first argument is board
 BOARD=$1
+WORKDIR=$BOARD-zip/4archive
 
 cd 4archive/
 
 # create a nested 4archive folder and move the desired board to it
-mkdir -p 4archive/
+mkdir -p $WORKDIR
 mv $BOARD 4archive/
 
 # zip up the folder
-zip -3 -r $BOARD-images-4archive.zip 4archive/
+zip -3 -r $BOARD-images-4archive.zip $WORKDIR
 
 # move the board out of the folder
-mv 4archive/$BOARD .
+mv $WORKDIR/$BOARD .
 
 # upload to Internet Archive
 s3cmd put $BOARD-images-4archive.zip s3://4archive/
