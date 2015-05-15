@@ -135,7 +135,7 @@ def main():
 		
 		# set path as board/thread as specified by chan.zip
 		path = os.path.join(workdir, str(board), str(thread))
-		print(":: Thread /{}/{}".format(board, thread))
+		print(":: Thread #{} /{}/{}".format(index, board, thread))
 		
 		# open each imageurls.txt and download all images from them
 		with open(os.path.join(path, imgurl_fname), "r") as f:
