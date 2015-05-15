@@ -51,7 +51,7 @@ python3 4archive-img-dl.py
 * /s/ - Sexy Beautiful Women (793 Threads, YSVPS)
 * (UPLOADED) /sci/ - Science (126 Threads, attaliates)
 * (DONE) /sp/ - Sports (158 Threads, 3312MB, attaliates)
-* (UPLOADING) /t/ - Torrents (158 Threads, attaliates)
+* (UPLOADED) /t/ - Torrents (158 Threads, attaliates)
 * (DONE) /toy/ - Toys (110 Threads, YSVPS)
 * (DONE) /trv/ - Travel (187 Threads, YSVPS)
 * /v/ - Video Games (5851 Threads, Chrysoloras)

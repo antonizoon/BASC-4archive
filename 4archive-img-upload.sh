@@ -13,7 +13,7 @@ cd 4archive/
 
 # create a nested 4archive folder and move the desired board to it
 mkdir -p $WORKDIR
-mv $BOARD 4archive/
+mv $BOARD $WORKDIR/
 
 # zip up the folder
 zip -3 -r $BOARD-images-4archive.zip $WORKDIR
