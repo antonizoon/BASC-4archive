@@ -128,7 +128,7 @@ def main():
 	start = int(row_amt)
 	
 	# iterate download through rows, board and thread_id as columns
-	for index in range(start, stop - 1):
+	for index in range(start, stop):
 		# grab data
 		board = data[index][0]
 		thread = data[index][1]
