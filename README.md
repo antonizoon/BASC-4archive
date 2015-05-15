@@ -48,7 +48,7 @@ python3 4archive-img-dl.py
 * /m/ Mecha (626 Threads)
 * (DONE) /po/ - Papercraft and Origami (5 threads, 29.2MB, tabris)
 : /pol/ Politically Incorrect (905 Threads, Chrysoloras)
-* (UPLOADING) /s/ - Sexy Beautiful Women (793 Threads, YSVPS)
+* /s/ - Sexy Beautiful Women (793 Threads, YSVPS)
 * (UPLOADED) /sci/ - Science (126 Threads, attaliates)
 * (DONE) /sp/ - Sports (158 Threads, 3312MB, attaliates)
 * (UPLOADING) /t/ - Torrents (158 Threads, attaliates)
