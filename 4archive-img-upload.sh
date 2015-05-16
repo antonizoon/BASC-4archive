@@ -27,4 +27,4 @@ cd ..
 mv $WORKDIR/* .
 
 # clean up the temp folder
-rm -rf $BOARD-zip
+#rm -rf $BOARD-zip
