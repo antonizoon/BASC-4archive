@@ -9,13 +9,13 @@
 BOARD=$1
 WORKDIR=$BOARD-zip/4archive
 
+cd 4archive/
+
 # if zip file exists, stop the script
 if [ -f "$BOARD-zip/$BOARD-images-4archive.zip" ]; then
 	echo "Images for $BOARD have already been compressed."
 	exit 0
 fi
-
-cd 4archive/
 
 # create a nested 4archive folder and move the desired board to it
 mkdir -p $WORKDIR
