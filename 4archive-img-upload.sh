@@ -9,15 +9,16 @@
 BOARD=$1
 WORKDIR=$BOARD-zip/4archive
 
-cd 4archive/
+# if workdir doesn't exist, stop the script
+if [ ! -d "$WORKDIR" ]; then
+	echo "Please compress the images first, using './4archive-img-zip.sh' ."
+	exit 0
+fi
 
-# create a nested 4archive folder and move the desired board to it
-mkdir -p $WORKDIR
-mv $BOARD $WORKDIR/
+cd 4archive/
 
 # zip up the folder
 cd $BOARD-zip/
-zip -3 -r $BOARD-images-4archive.zip 4archive/
 
 # upload to Internet Archive
 s3cmd put $BOARD-images-4archive.zip s3://4archive/
