@@ -12,7 +12,7 @@ WORKDIR=$BOARD-zip/4archive
 cd 4archive/
 
 # if workdir doesn't exist, stop the script
-if [ -f "$BOARD-zip/$BOARD-images-4archive.zip" ]; then
+if [ ! -f "$BOARD-zip/$BOARD-images-4archive.zip" ]; then
 	echo "Please compress the images first, using './4archive-img-zip.sh' ."
 	exit 0
 fi
